@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skyline — Weather</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="sky" class="sky sky--day">
+  <div class="sky__layer sky__stars"></div>
+  <div class="sky__layer sky__glow"></div>
+</div>
+
+<main class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand__mark">◐</span>
+      <span class="brand__name">Skyline</span>
+    </div>
+    <form id="searchForm" class="search" autocomplete="off">
+      <input id="cityInput" class="search__input" type="text" placeholder="Search a city…" aria-label="Search a city">
+      <button class="search__btn" type="submit" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </form>
+  </header>
+
+  <!-- Empty state -->
+  <section id="emptyState" class="state state--empty">
+    <p class="state__eyebrow">No city selected</p>
+    <h1 class="state__title">Search a city to see conditions</h1>
+    <div class="chip-row" id="suggestionChips"></div>
+  </section>
+
+  <!-- Loading state -->
+  <section id="loadingState" class="state state--loading hidden">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="state__eyebrow">Reading the sky…</p>
+  </section>
+
+  <!-- Error state -->
+  <section id="errorState" class="state state--error hidden">
+    <p class="state__eyebrow">Something went wrong</p>
+    <h1 id="errorTitle" class="state__title">City not found</h1>
+    <p id="errorDetail" class="state__body">Check the spelling and try again.</p>
+  </section>
+
+  <!-- Weather content -->
+  <section id="weatherState" class="weather hidden">
+
+    <div class="hero">
+      <div class="hero__location">
+        <h1 id="cityName" class="hero__city">—</h1>
+        <p id="cityMeta" class="hero__meta">—</p>
+      </div>
+
+      <div class="hero__reading">
+        <span id="weatherEmoji" class="hero__emoji">—</span>
+        <span id="temp" class="hero__temp">—°</span>
+      </div>
+
+      <p id="description" class="hero__desc">—</p>
+      <p id="feelsLike" class="hero__feels">—</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <span class="stat__label">Humidity</span>
+        <span id="humidity" class="stat__value">—%</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Wind</span>
+        <span id="wind" class="stat__value">— m/s</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Pressure</span>
+        <span id="pressure" class="stat__value">— hPa</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Visibility</span>
+        <span id="visibility" class="stat__value">— km</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Sunrise</span>
+        <span id="sunrise" class="stat__value">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Sunset</span>
+        <span id="sunset" class="stat__value">—</span>
+      </div>
+    </div>
+
+    <div class="recent" id="recentRow" aria-label="Recent searches"></div>
+
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

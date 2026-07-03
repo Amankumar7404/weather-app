@@ -1,0 +1,365 @@
+/* ============================================
+   Tokens
+   ============================================ */
+:root {
+  --ink: #10121c;
+  --paper: #f4f2ee;
+  --glass: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --gold: #ffb84d;
+  --coral: #ff8a65;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--paper);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ============================================
+   Dynamic sky background
+   ============================================ */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  transition: background 1.4s ease;
+}
+
+.sky--day {
+  background: linear-gradient(160deg, #4f8ff0 0%, #6fb1ff 35%, #a9d3ff 70%, #ecf5ff 100%);
+}
+
+.sky--night {
+  background: linear-gradient(160deg, #060818 0%, #131a3a 40%, #262a52 75%, #3a2f57 100%);
+}
+
+.sky--cloudy {
+  background: linear-gradient(160deg, #5c6b82 0%, #7c8ba3 40%, #a9b4c4 75%, #ccd3dc 100%);
+}
+
+.sky--sunset {
+  background: linear-gradient(160deg, #22214a 0%, #6b3f6b 30%, #c9587a 60%, #ff9a5a 90%, #ffcf8a 100%);
+}
+
+.sky__layer { position: absolute; inset: 0; }
+
+.sky__stars {
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  background-image:
+    radial-gradient(1.5px 1.5px at 10% 20%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 80% 15%, #fff, transparent),
+    radial-gradient(1px 1px at 45% 35%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 65% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 25% 70%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 90% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 15% 85%, #fff, transparent),
+    radial-gradient(1px 1px at 55% 10%, #fff, transparent);
+}
+
+.sky--night .sky__stars,
+.sky--sunset .sky__stars { opacity: 0.9; }
+
+.sky__glow {
+  background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.18), transparent 70%);
+}
+
+/* ============================================
+   Layout
+   ============================================ */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.brand__mark {
+  font-size: 20px;
+  color: var(--gold);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 999px;
+  padding: 4px 4px 4px 18px;
+  min-width: 260px;
+  flex: 1;
+  max-width: 340px;
+}
+
+.search__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.search__input::placeholder { color: rgba(244,242,238,0.55); }
+
+.search__btn {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.search__btn:hover { transform: scale(1.06); }
+.search__btn:active { transform: scale(0.96); }
+
+/* ============================================
+   States (empty / loading / error)
+   ============================================ */
+.state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.state--loading { align-items: center; text-align: center; }
+
+.state__eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(244,242,238,0.6);
+  margin-bottom: 10px;
+}
+
+.state__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.15;
+  max-width: 480px;
+}
+
+.state__body {
+  margin-top: 10px;
+  color: rgba(244,242,238,0.75);
+  font-size: 15px;
+}
+
+.state--error .state__title { color: var(--coral); }
+
+.chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--paper);
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.15s ease;
+}
+
+.chip:hover { background: rgba(255,255,255,0.24); }
+
+.spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(244,242,238,0.25);
+  border-top-color: var(--paper);
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hidden { display: none !important; }
+
+/* ============================================
+   Weather content
+   ============================================ */
+.weather {
+  animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero {
+  padding: 36px 8px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  margin-bottom: 28px;
+}
+
+.hero__city {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(30px, 5vw, 42px);
+  letter-spacing: -0.01em;
+}
+
+.hero__meta {
+  color: rgba(244,242,238,0.65);
+  font-size: 13px;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero__reading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.hero__emoji { font-size: 52px; line-height: 1; }
+
+.hero__temp {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(72px, 14vw, 120px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.hero__desc {
+  font-size: 17px;
+  text-transform: capitalize;
+  margin-top: 10px;
+}
+
+.hero__feels {
+  color: rgba(244,242,238,0.65);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(244,242,238,0.6);
+}
+
+.stat__value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.recent {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.recent span {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--glass-border);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.recent span:hover { background: rgba(255,255,255,0.22); }
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 520px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .app { padding: 24px 18px 48px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .weather, .spinner, .sky { animation: none !important; transition: none !important; }
+}
+
+/* Keyboard focus visibility */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
